@@ -1,0 +1,23 @@
+{
+  "name": "nodestyle",
+  "version": "1.0.0",
+  "description": "A Node JS wrapper for the neural style neural network.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Razerfish/nodestyle.git"
+  },
+  "keywords": [
+    "Pytorch",
+    "NeuralStyle"
+  ],
+  "author": "Alec Wilson",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/Razerfish/nodestyle/issues"
+  },
+  "homepage": "https://github.com/Razerfish/nodestyle#readme"
+}
