@@ -1,0 +1,53 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Node: Console",
+            "program": "${file}",
+            "console": "internalConsole"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Node: Terminal",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Terminal (integrated)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug Training",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/Assets/Scripts/torchbrain.py",
+            "console": "integratedTerminal",
+            "args": ["neural_style", "{\"subcommand\":\"train\", \"dataset\":\"./Testing_Assets/Testing_Assets/dataset\", \"style_image\":\"./Testing_Assets/Testing_Assets/style_image.jpg\", \"save_model_dir\":\"./Tests/Models\", \"name\":\"Test_Model\", \"cuda\":1}"]
+        },
+        {
+            "name": "Debug Stylization",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/Assets/Scripts/torchbrain.py",
+            "console": "integratedTerminal",
+            "args": ["neural_style", "{\"subcommand\":\"eval\", \"content_image\":\"./Testing_Assets/Testing_Assets/content.jpg\", \"output_image\":\"./Tests/Test_Output.jpg\", \"model\":\"./Testing_Assets/Testing_Assets/model.pth\", \"cuda\":1}"]
+        },
+        {
+            "name": "Debug check_cuda",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/Assets/Scripts/torchbrain.py",
+            "console": "integratedTerminal",
+            "args": ["check_cuda"]
+        }
+    ]
+}
