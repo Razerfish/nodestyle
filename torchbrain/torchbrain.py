@@ -1,5 +1,3 @@
-import failsafe
-
 import neural_style
 import check_cuda
 
