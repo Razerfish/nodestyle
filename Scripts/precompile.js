@@ -3,7 +3,7 @@ const exec = require('child_process').exec;
 require('colors');
 
 if (utils.checkPython()) {
-    const precompile = exec("py Tools/precompile.py");
+    const precompile = exec("py Scripts/precompile.py");
 
     precompile.stderr.on('data', (data) => {
         console.error(`${data.toString()}\n`.red);
