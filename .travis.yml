@@ -1,0 +1,21 @@
+os: windows
+language: node_js
+node_js:
+  - "10"
+
+before_install:
+- choco install python --version "3.7.1"
+- C:/Python37/python.exe -m venv env
+- source env/Scripts/activate
+
+install:
+  - python -m pip install --upgrade pip setuptools
+  - pip install -r requirements.txt
+  - npm install
+
+before_script:
+  - npm run lint
+  
+script:
+  - npm run compile
+  - npm publish --dry-run
