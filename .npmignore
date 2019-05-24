@@ -1,0 +1,8 @@
+.eslintrc
+requirements.txt
+*.spec
+torchbrain/**
+env/**
+.vscode/**
+.gitignore
+Scripts/**
