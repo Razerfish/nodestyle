@@ -215,4 +215,4 @@ dmypy.json
 build/**
 
 # Torchbrain binary
-.bin/**
+bin/**
