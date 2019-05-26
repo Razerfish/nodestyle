@@ -216,3 +216,9 @@ build/**
 
 # Torchbrain binary
 bin/**
+
+# Testing assets
+Tests/Testing_Assets/**
+
+# Testing output
+Tests/output/**
