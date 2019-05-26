@@ -9,7 +9,7 @@
     "precompile": "node ./Scripts/precompile.js",
     "postcompile": "node ./Scripts/copyLicense.js",
     "setup": "node ./Scripts/setup.js",
-    "lint": "eslint . Scripts --color"
+    "lint": "eslint . Scripts test --color"
   },
   "repository": {
     "type": "git",
