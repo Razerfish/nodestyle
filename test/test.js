@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const checkCuda = require('../checkCuda');
+const checkCuda = require('../main').checkCuda;
 
 describe("checkCuda.js", () => {
     describe("checkCuda", () => {
