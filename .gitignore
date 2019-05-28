@@ -222,3 +222,6 @@ test/Testing_Assets/**
 
 # Testing output
 test/output/**
+
+# VGG16 model
+torchbrain/vgg16-397923af.pth

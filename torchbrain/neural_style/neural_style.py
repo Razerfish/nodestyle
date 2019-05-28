@@ -19,6 +19,9 @@ from neural_style.vgg import Vgg16
 
 import argparse
 
+# Set the TORCH_MODEL_ZOO to the directory that torchbrain is stored in so that the model loader looks there first.
+os.environ["TORCH_MODEL_ZOO"] = os.path.dirname(sys.argv[0])
+
 def check_paths(args):
     try:
         if not os.path.exists(args.save_model_dir):
