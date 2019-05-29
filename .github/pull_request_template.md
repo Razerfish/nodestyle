@@ -1,6 +1,6 @@
 ---
 name: Pull Request
-aboud: Propose some changes
+about: Propose some changes
 title: Pull Request
 assignees: Razerfish
 ---
