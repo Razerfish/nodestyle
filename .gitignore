@@ -225,3 +225,4 @@ test/output/**
 
 # VGG16 model
 torchbrain/vgg16-397923af.pth
+torchbrain/vgg16-397923af.pth.tmp
