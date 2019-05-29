@@ -1,10 +1,3 @@
----
-name: Pull Request
-about: Propose some changes
-title: Pull Request
-assignees: Razerfish
----
-
 * **Please check if the PR fulfills these requirements**
 - [ ] Code is linted properly
 - [ ] Tests for the changes have been added (for bug fixes / features)
