@@ -1,11 +1,11 @@
 const assert = require('assert');
 
-const checkCuda = require('../main').checkCuda;
+const nodeStyle = require('../main');
 
 describe("checkCuda.js", () => {
     describe("checkCuda", () => {
         it("Should resolve as true or false", () => {
-            return checkCuda.checkCuda().then((cuda) => {
+            return nodeStyle.checkCuda().then((cuda) => {
                 assert.equal(typeof cuda, 'boolean');
             });
         });
@@ -13,7 +13,7 @@ describe("checkCuda.js", () => {
 
     describe("checkCudaSync", () => {
         it("Should equal true or false", () => {
-            assert.equal(typeof checkCuda.checkCudaSync(), 'boolean');
+            assert.equal(typeof nodeStyle.checkCudaSync(), 'boolean');
         });
     });
 });
