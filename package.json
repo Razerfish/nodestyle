@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "mocha",
-    "compile": "pyinstaller torchbrain.spec --onedir --noconfirm --workpath=build --distpath=bin",
+    "compile": "pyinstaller torchbrain.spec --onedir --noconfirm --workpath=build --distpath=app/bin",
     "precompile": "node ./Scripts/precompile.js",
     "postcompile": "node ./Scripts/copyLicense.js",
     "setup": "node ./Scripts/setup.js",
