@@ -215,7 +215,7 @@ dmypy.json
 build/**
 
 # Torchbrain binary
-bin/**
+app/bin/**
 
 # Testing assets
 test/Testing_Assets/**
