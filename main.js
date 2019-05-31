@@ -1,4 +1,4 @@
-const checkCuda = require('./checkCuda');
+const checkCuda = require('./app/checkCuda');
 
 module.exports = {
     checkCuda: checkCuda.checkCuda,
