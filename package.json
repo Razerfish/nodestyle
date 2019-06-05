@@ -20,7 +20,7 @@
     "Pytorch",
     "NeuralStyle"
   ],
-  "author": "Alec Wilson",
+  "author": "Alec Wilson <alec.wilson@baxter-academy.org> (Razerfish.dev)",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/Razerfish/nodestyle/issues"
