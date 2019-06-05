@@ -17,3 +17,11 @@ describe("checkCuda.js", () => {
         });
     });
 });
+
+describe("torchTools.js", () => {
+    describe("getTorchPath", () => {
+        it("Should return a string", () => {
+            assert.equal(typeof nodeStyle.torch.getTorchPath(), 'string');
+        });
+    });
+});
