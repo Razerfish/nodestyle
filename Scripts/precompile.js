@@ -1,4 +1,7 @@
 const fs = require('fs');
+const os = require('os')
+const path = require('path');
+const model = require('./acquireModel');
 const utils = require('./utils');
 const exec = require('child_process').exec;
 
@@ -30,14 +33,14 @@ function checkEnv() {
 }
 
 function checkModel() {
-    const model = fs.existsSync("./torchbrain/vgg16-397923af.pth");
-
-    if (!model) {
-        console.error("Vgg16 model is missing from torchbrain, download it by running: npm run model".red);
-        process.exit(2);
+    if (!fs.existsSync("./torchbrain/vgg16-397923af.pth")) {
+        if (fs.existsSync(path.join(os.homedir(), ".torch/models/vgg16-397923af.pth"))) {
+            model.copyModel();
+        } else {
+            model.downloadModel();
+        }
     } else {
-        console.log("Vgg16 model is present\n".blue);
-        process.exit(0);
+        console.log("Model is present\n".blue);
     }
 }
 
