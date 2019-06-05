@@ -20,4 +20,4 @@ before_script:
 script:
   - npm run compile
   - npm test
-  - npm publish --dry-run
+  - npm pack --dry-run
