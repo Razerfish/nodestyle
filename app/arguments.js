@@ -26,3 +26,7 @@ function validateCuda(args) {
         throw new Error(`Unknown cuda mode: ${args.cuda}`);
     }
 }
+
+module.exports = {
+    validateCuda: validateCuda
+}
