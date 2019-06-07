@@ -1,6 +1,6 @@
 /**
  * @function validateCuda
- * @param {Object} args Neural style arguments object.
+ * @param {Object} args Neural style arguments to validate.
  * @description Validates the cuda parameter in the args object, either passes or throws an error.
  */
 function validateCuda(args) {
