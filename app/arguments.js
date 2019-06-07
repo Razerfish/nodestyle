@@ -22,7 +22,7 @@ function validateCuda(args) {
     }
 
     // Check that the given cuda mode is one of the possible options.
-    if (args.cuda !== "yes" || args.cuda !== "no" || args.cuda !== "lax") {
+    if (args.cuda !== "yes" && args.cuda !== "no" && args.cuda !== "lax") {
         throw new Error(`Unknown cuda mode: ${args.cuda}`);
     }
 }
