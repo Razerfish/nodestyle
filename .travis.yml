@@ -12,10 +12,10 @@ install:
   - python -m pip install --upgrade pip setuptools
   - pip install -r requirements.txt
   - npm install
+  - npm run model
 
 before_script:
   - npm run lint
-  - npm run model
   
 script:
   - npm run compile
