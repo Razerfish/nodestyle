@@ -31,7 +31,7 @@ function checkCuda() {
                 });
 
                 // Whenever we get an error, check if it can be parsed as JSON and store it in errors.
-                let errors = [];
+                const errors = [];
                 cudaProcess.stderr.on('data', (error) => {
                     error.toString().split("\n").forEach((chunk) => {
                         if (chunk.length > 0) {
@@ -66,7 +66,7 @@ function checkCuda() {
  */
 function checkCudaSync(timeout = 10000) {
     // Get output from the check CUDA process.
-    let cuda = execFileSync(path.join(__dirname, "bin/torchbrain/torchbrain.exe"), ["check_cuda"], {
+    const cuda = execFileSync(path.join(__dirname, "bin/torchbrain/torchbrain.exe"), ["check_cuda"], {
         timeout: timeout
     });
 
@@ -77,4 +77,4 @@ function checkCudaSync(timeout = 10000) {
 module.exports = {
     checkCuda,
     checkCudaSync
-}
+};
