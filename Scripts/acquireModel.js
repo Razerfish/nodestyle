@@ -31,7 +31,7 @@ function downloadModel() {
                     if (message.length > max) {
                         max = message.length;
                     } else {
-                        for (var i = 0; i < max - message.length; i++) {
+                        for (let i = 0; i < max - message.length; i++) {
                             message += " ";
                         }
                     }
@@ -82,12 +82,12 @@ function verifyModel(modelPath, timeout=7500) {
         Attempt to get model hash from file name.
         The target models are named using this pattern: vgg16-{hex digits from the files hash}.pth
         */
-        let srcHash = path.basename(modelPath).match(/(?<=vgg16-)([0-9a-f]*)(?=\.pth)/gi)[0];
+        const srcHash = path.basename(modelPath).match(/(?<=vgg16-)([0-9a-f]*)(?=\.pth)/gi)[0];
 
         let hash = crypto.createHash('sha256');
         hash.setEncoding('hex');
 
-        let srcFile = fs.createReadStream(modelPath);
+        const srcFile = fs.createReadStream(modelPath);
 
         srcFile.on('end', () => {
             hash.end();
@@ -162,4 +162,4 @@ module.exports = {
     copyModel,
     verifyModel,
     main
-}
+};

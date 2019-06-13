@@ -8,17 +8,19 @@
     "ecmaVersion": 2018
   },
 
+  "extends": "eslint:recommended",
+
   "rules": {
+    "prefer-template": "warn",
+    "semi": "error",
+    "dot-notation": "warn",
+    "no-var": "warn",
+    "prefer-const": "warn",
     "linebreak-style": 0,
     "indent": ["error", 4],
-    "comma-dangle": ["error", "never"],
-    "quotes": "off",
+    "comma-dangle": ["warn", "never"],
     "no-trailing-spaces": "off",
-    "no-console": "off",
-    "no-param-reassign": "warn",
     "consistent-return": "warn",
-    "no-else-return": "off",
-    "no-unused-vars": "warn",
-    "no-plusplus": ["warn", { "allowForLoopAfterthoughts": true }]
+    "no-unused-vars": "warn"
   }
 }

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const os = require('os')
+const os = require('os');
 const path = require('path');
 const model = require('./acquireModel');
 const utils = require('./utils');
