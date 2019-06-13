@@ -226,3 +226,6 @@ test/output/**
 # VGG16 model
 torchbrain/vgg16-397923af.pth
 torchbrain/vgg16-397923af.pth.tmp
+
+# VS Code config file
+.vscode/settings.json
