@@ -1,5 +1,5 @@
-const shell = require('shelljs');
 const fs = require('fs');
+const shell = require('shelljs');
 const readline = require('readline-sync');
 
 
@@ -32,38 +32,20 @@ function checkPython() {
     }
 }
 
+
 /**
  * @function checkEnv
- * @description Checks if ./env exists and if it does, asks the user if they want to overwrite it
- * and returns the result.
- * @returns Int of either 1, 2 or 3. With 0 meaning do not proceed, 1 meaning proceed and 2 meaning
- * delete existing env and then
- * proceed.
+ * @description - Checks if the env directory exists.
+ * @returns {Boolean} - returns true if the env does exist and false if it doesn't.
  */
 function checkEnv() {
-    // Check if virtual environment already exists.
     if (fs.existsSync("./env")) {
-        // If env exists, ask the user if they want to overwrite it.
-        let overwrite;
-        for (let i = 0; i < 3; i++) {
-            overwrite = readline.question("env already exists. Do you want to overwrite it? y/n\n");
-            
-            if (overwrite.toLowerCase() === "y") {
-                return 2;
-            } else if (overwrite.toLocaleLowerCase() === "n") {
-                return 0;
-            } else {
-                console.log(`Unknown option ${overwrite}\n`);
-            }
-        }
-
-        console.error("There have been three failed input attempts. Exiting...\n".red);            
-        process.exit(1);
+        return true;
+    } else {
+        return false;
     }
-
-    // If no virtual environment was found, create one.
-    return 1;
 }
+
 
 module.exports = {
     checkPython,
