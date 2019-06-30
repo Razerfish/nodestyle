@@ -1,9 +1,8 @@
 const fs = require('fs');
 const shell = require('shelljs');
-const readline = require('readline-sync');
-
 
 require('colors');
+
 
 /**
  * @function checkPython
