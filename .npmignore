@@ -1,9 +1,9 @@
 .eslintrc
-requirements.txt
-*.spec
-torchbrain/**
 env/**
 .vscode/**
 .gitignore
-Scripts/**
 build/**
+app/bin/**
+**/__pycache__/**
+*.pth
+test/**
