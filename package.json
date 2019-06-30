@@ -8,7 +8,7 @@
     "compile": "pyinstaller torchbrain.spec --onedir --noconfirm --workpath=build --distpath=app/bin",
     "precompile": "node ./Scripts/precompile.js",
     "postcompile": "node ./Scripts/copyLicense.js",
-    "setup": "node ./Scripts/setup.js",
+    "venv": "node ./Scripts/venv.js",
     "model": "node ./Scripts/acquireModel.js",
     "lint": "eslint . Scripts test --color"
   },

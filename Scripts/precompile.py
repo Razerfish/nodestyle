@@ -73,7 +73,7 @@ if not proceed:
         message += (
             "The following packages are out of date: " + formattedConflicting + "."
         )
-    message += "\nHave you run npm setup and activated the environment?\n"
+    message += "\nHave you run the \"venv\" script and activated the environment?\n"
 
     print(bcolors.FAIL + message + bcolors.ENDC)
     sys.exit(1)
