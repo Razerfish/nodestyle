@@ -1,6 +1,7 @@
+const ora = require('ora');
 const rimraf = require('rimraf');
-const shell = require('shelljs');
-const utils = require('./utils');
+const python = require('./python');
+const cp = require('child_process');
 const execFile = require('child_process').execFile;
 
 require('colors');
@@ -35,21 +36,33 @@ function removeEnv() {
 function createEnv() {
     /* eslint-disable no-shadow */
     return new Promise((resolve, reject) => {
+        const pythonPath = python.findPython();
+
+        let spinner = ora({ prefixText: "Creating virtual environment", spinner: "line" });
+        spinner.start();
+
         // Create virtual environment.
-        const create = shell.exec("python -m venv env", { async: true, silent: true });
+        const create = cp.execFile(pythonPath, ['-m', 'venv', 'env']);
 
         create.stdout.on('data', (data) => {
-            process.stdout.write(data.toString());
+            spinner.text = data.toString().trim();
         });
 
         create.stderr.on('data', (data) => {
-            process.stderr.write(data.toString().red);
+            spinner.warn(data.toString().trim()).start();
         });
 
         create.on('exit', (code) => {
             if (code !== 0) {
+                spinner.fail();
+
                 reject();
             } else {
+                spinner.succeed();
+
+                spinner = ora({ prefixText: "Upgrading components", spinner: "line" }).start();
+
+
                 // Upgrade pip and setuptools
                 const upgrade = execFile("./env/Scripts/python.exe", [
                     '-m',
@@ -61,15 +74,20 @@ function createEnv() {
                 ]);
 
                 upgrade.stdout.on('data', (data) => {
-                    process.stdout.write(data.toString());
+                    spinner.text = data.toString().trim();
                 });
 
                 upgrade.stderr.on('data', (data) => {
-                    process.stderr.write(data.toString().red);
+                    spinner.warn(data.toString().trim()).start();
                 });
 
                 upgrade.on('exit', (code) => {
                     if (code === 0) {
+                        spinner.text = "";
+                        spinner.succeed();
+
+                        spinner = ora({ prefixText: "Installing dependencies", spinner: "line" }).start();
+
                         // Install packages from requirements.txt
                         const install = execFile("./env/Scripts/pip.exe", [
                             'install',
@@ -78,21 +96,28 @@ function createEnv() {
                         ]);
 
                         install.stdout.on('data', (data) => {
-                            process.stdout.write(data.toString());
+                            spinner.text = data.toString().trim();
                         });
 
                         install.stderr.on('data', (data) => {
-                            process.stderr.write(data.toString().red);
+                            spinner.warn(data.toString().trim());
                         });
 
                         install.on('exit', (code) => {
                             if (code === 0) {
+                                spinner.text = "";
+                                spinner.succeed();
+
                                 resolve();
                             } else {
+                                spinner.fail();
+
                                 reject();
                             }
                         });
                     } else {
+                        spinner.fail();
+
                         reject();
                     }
                 });
@@ -104,33 +129,17 @@ function createEnv() {
 
 (async () => {
     // Check if python is available.
-    if (utils.checkPython()) {
+    const pythonPath = python.findPython({ silent: true });
+
+    if (pythonPath) {
         // Check if env exists.
-        const envCode = utils.checkEnv();
-        if (envCode === 0) {
-            // env already exists, do not proceed.
-            process.exit(0);
-        } else if (envCode === 1) {
-            try {
-                await createEnv();
-                process.exit(0);
-            } catch (err) {
-                console.error(`${err.toString()}\n`.red);
-                process.exit(1);
-            }
-        } else if (envCode === 2) {
-            try {
-                await removeEnv();
-                await createEnv();
-                console.log("\nDone!\n".green);
-                process.exit(0);
-            } catch (err) {
-                console.error(`${err.toString()}\n`.red);
-                process.exit(1);
-            }
+        const env = python.checkEnv();
+
+        if (env) {
+            await removeEnv();
+            await createEnv();
         } else {
-            console.error(`Expected code 0, 1 or 2. Got code ${envCode}\n`.red);
-            process.exit(1);
+            await createEnv();
         }
     } else {
         console.error("Python is not available\n".red);

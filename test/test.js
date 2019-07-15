@@ -5,7 +5,7 @@ const assert = require('assert');
 
 const nodeStyle = require('../main');
 
-const utils = require('../Scripts/utils');
+const python = require('../Scripts/python');
 
 describe("checkCuda.js", function() {
     describe("checkCuda", function() {
@@ -26,10 +26,10 @@ describe("checkCuda.js", function() {
 });
 
 
-describe("utils.js", function() {
+describe("python.js", function() {
     describe("checkEnv", function() {
         it("Should equal the statement: fs.existsSync(./env)", function() {
-            assert.equal(utils.checkEnv(), fs.existsSync("./env"));
+            assert.equal(python.checkEnv(), fs.existsSync("./env"));
         });
     });
 });

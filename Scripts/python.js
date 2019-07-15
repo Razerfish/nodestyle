@@ -176,6 +176,22 @@ function findPython(options) {
 
 
 
+/**
+ * @function checkEnv
+ * @description - Checks if the env directory exists.
+ * @returns {Boolean} - returns true if the env does exist and false if it doesn't.
+ */
+function checkEnv() {
+    if (fs.existsSync("./env")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
 module.exports = {
-    findPython: findPython
+    findPython: findPython,
+    checkEnv: checkEnv
 };

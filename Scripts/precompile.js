@@ -1,15 +1,17 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const python = require('./python');
+const cp = require('child_process');
 const model = require('./acquireModel');
-const utils = require('./utils');
-const exec = require('child_process').exec;
+
 
 require('colors');
 
-function checkEnv() {
-    if (utils.checkPython()) {
-        const precompile = exec("py Scripts/precompile.py");
+
+function verifyEnv() {
+    if (python.checkEnv()) {
+        const precompile = cp.execFile("./env/Scripts/PYTHON.exe", ["Scripts/precompile.py"]);
 
         precompile.stderr.on('data', (data) => {
             console.error(`${data.toString()}\n`.red);
@@ -27,10 +29,12 @@ function checkEnv() {
             }
         });
     } else {
-        console.error("Python is not available\n".red);
+        console.error("env is not present".red);
         process.exit(1);
     }
 }
+
+
 
 function checkModel() {
     if (!fs.existsSync("./torchbrain/vgg16-397923af.pth")) {
@@ -44,4 +48,5 @@ function checkModel() {
     }
 }
 
-checkEnv();
+verifyEnv();
+checkModel();
