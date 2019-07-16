@@ -10,7 +10,7 @@
     "postcompile": "node ./Scripts/copyLicense.js",
     "venv": "node ./Scripts/venv.js",
     "model": "node ./Scripts/acquireModel.js",
-    "lint": "eslint . Scripts test --color"
+    "lint": "eslint app Scripts test --color"
   },
   "repository": {
     "type": "git",
