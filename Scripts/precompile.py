@@ -1,5 +1,6 @@
 import re
 import sys
+import json
 
 import pkg_resources
 from pkg_resources import DistributionNotFound, VersionConflict
@@ -46,41 +47,21 @@ for i in range(len(required)):
         torchVersion = torchVersion[0] + "==" + torchVersion[1]
         required[i] = torchVersion
 
-proceed = True
+satisfies = True
 missing = []
 conflicting = []
 for i in range(len(required)):
     try:
         pkg_resources.require(required[i])
     except DistributionNotFound:
-        proceed = False
+        satisfies = False
         missing.append(formatPackage(required[i]))
     except VersionConflict:
-        proceed = False
+        satisfies = False
         conflicting.append(formatPackage(required[i]))
 
-if not proceed:
-    formattedMissing = formatEntries(missing)
-    formattedConflicting = formatEntries(conflicting)
-
-    message = "\n"
-
-    if formattedMissing is not None:
-        message += "The following packages are missing: " + formattedMissing + "."
-    if formattedConflicting is not None:
-        if len(message) != 1:
-            message += "\n"
-        message += (
-            "The following packages are out of date: " + formattedConflicting + "."
-        )
-    message += "\nHave you run the \"venv\" script and activated the environment?\n"
-
-    print(bcolors.FAIL + message + bcolors.ENDC)
-    sys.exit(1)
-else:
-    print(
-        bcolors.OKBLUE
-        + "All required packages are installed and up to date"
-        + bcolors.ENDC
-    )
-    sys.exit(0)
+print(json.dumps({
+    "satisfies": satisfies,
+    "missing": missing,
+    "conflicting": conflicting
+}), flush=True)

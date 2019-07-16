@@ -1,29 +1,10 @@
 const ora = require('ora');
-const rimraf = require('rimraf');
 const python = require('./python');
 const cp = require('child_process');
 const execFile = require('child_process').execFile;
 
 require('colors');
 
-
-/**
- * @function removeEnv
- * @returns Promise object that resolves once the ./env folder has been deleted or can 
- * reject with an error.
- * @description Deletes an existing python virtual environment found in env.
- */
-function removeEnv() {
-    return new Promise((resolve, reject) => {
-        rimraf("env", (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
 
 /**
  * @function createEnv
@@ -38,7 +19,7 @@ function createEnv() {
     return new Promise((resolve, reject) => {
         const pythonPath = python.findPython();
 
-        let spinner = ora({ prefixText: "Creating virtual environment", spinner: "line" });
+        const spinner = ora({ prefixText: "Creating virtual environment", spinner: "line" });
         spinner.start();
 
         // Create virtual environment.
@@ -53,81 +34,118 @@ function createEnv() {
         });
 
         create.on('exit', (code) => {
-            if (code !== 0) {
-                spinner.fail();
+            if (code === 0) {
+                spinner.succeed();
 
-                reject();
+                resolve();
             } else {
                 spinner.succeed();
 
-                spinner = ora({ prefixText: "Upgrading components", spinner: "line" }).start();
-
-
-                // Upgrade pip and setuptools
-                const upgrade = execFile("./env/Scripts/python.exe", [
-                    '-m',
-                    'pip',
-                    'install',
-                    '-U',
-                    'pip',
-                    'setuptools'
-                ]);
-
-                upgrade.stdout.on('data', (data) => {
-                    spinner.text = data.toString().trim();
-                });
-
-                upgrade.stderr.on('data', (data) => {
-                    spinner.warn(data.toString().trim()).start();
-                });
-
-                upgrade.on('exit', (code) => {
-                    if (code === 0) {
-                        spinner.text = "";
-                        spinner.succeed();
-
-                        spinner = ora({ prefixText: "Installing dependencies", spinner: "line" }).start();
-
-                        // Install packages from requirements.txt
-                        const install = execFile("./env/Scripts/pip.exe", [
-                            'install',
-                            '-r',
-                            'requirements.txt'
-                        ]);
-
-                        install.stdout.on('data', (data) => {
-                            spinner.text = data.toString().trim();
-                        });
-
-                        install.stderr.on('data', (data) => {
-                            spinner.warn(data.toString().trim());
-                        });
-
-                        install.on('exit', (code) => {
-                            if (code === 0) {
-                                spinner.text = "";
-                                spinner.succeed();
-
-                                resolve();
-                            } else {
-                                spinner.fail();
-
-                                reject();
-                            }
-                        });
-                    } else {
-                        spinner.fail();
-
-                        reject();
-                    }
-                });
+                reject();
             }
         });
     });
 }
 /* eslint-enable no-shadow */
 
-(async () => {
+
+/**
+ * @function prepareEnv
+ * @description Upgrades pip and setuptools to their latest versions.
+ * @returns A promise representing the completion of the described task.
+ */
+function prepareEnv() {
+    return new Promise((resolve, reject) => {
+        const spinner = ora({ prefixText: "Upgrading components", spinner: "line" }).start();
+
+        // Upgrade pip and setuptools
+        const upgrade = execFile("./env/Scripts/python.exe", [
+            '-m',
+            'pip',
+            'install',
+            '-U',
+            'pip',
+            'setuptools'
+        ]);
+
+        upgrade.stdout.on('data', (data) => {
+            spinner.text = data.toString().trim();
+        });
+
+        upgrade.stderr.on('data', (data) => {
+            spinner.warn(data.toString().trim()).start();
+        });
+
+        upgrade.on('exit', (code) => {
+            if (code === 0) {
+                spinner.text = "";
+                spinner.succeed();
+
+                resolve();
+            } else {
+                spinner.text = "";
+                spinner.fail();
+
+                reject();
+            }
+        });    
+    });
+}
+
+
+/**
+ * @function installEnv
+ * @description Installs dependencies as defined in requirements.txt.
+ * @returns A promise representing the completion of the described task.
+ */
+function installEnv() {
+    return new Promise((resolve, reject) => {
+        const spinner = ora({ prefixText: "Installing dependencies", spinner: "line" }).start();
+
+        // Install packages from requirements.txt
+        const install = execFile("./env/Scripts/pip.exe", [
+            'install',
+            '-r',
+            'requirements.txt'
+        ]);
+
+        install.stdout.on('data', (data) => {
+            spinner.text = data.toString().trim();
+        });
+
+        install.stderr.on('data', (data) => {
+            spinner.warn(data.toString().trim());
+        });
+
+        install.on('exit', (code) => {
+            if (code === 0) {
+                spinner.text = "";
+                spinner.succeed();
+
+                resolve();
+            } else {
+                spinner.fail();
+
+                reject();
+            }
+        });
+    });
+}
+
+
+/**
+ * @function verifyEnv
+ * @description Check if all required packages are installed to the virtual environment.
+ * @return {Array} [satisfies, missing, conflicting]
+ */
+function verifyEnv() {
+    const verify = JSON.parse(cp.execFileSync("./env/Scripts/PYTHON.exe", ["./Scripts/precompile.py"]).toString());
+
+    return [verify.satisfies, verify.missing, verify.conflicting];
+}
+
+
+async function main() {
     // Check if python is available.
     const pythonPath = python.findPython({ silent: true });
 
@@ -136,16 +154,37 @@ function createEnv() {
         const env = python.checkEnv();
 
         if (env) {
-            await removeEnv();
-            await createEnv();
+            if (verifyEnv()[0]) {
+                process.exit(0);
+            } else {
+                await prepareEnv();
+                await installEnv();
+            }
+
         } else {
             await createEnv();
+            await prepareEnv();
+            await installEnv();
         }
     } else {
         console.error("Python is not available\n".red);
         process.exit(1);
     }
-})().catch((err) => {
-    console.error(err.toString().red);
-    process.exit(1);
-});
+}
+
+
+if (require.main === module) {
+    main().catch((err) => {
+        console.error(err.toString().red);
+        process.exit(1);
+    });
+}
+
+
+module.exports = {
+    main: main,
+    createEnv: createEnv,
+    prepareEnv: prepareEnv,
+    installEnv: installEnv,
+    verifyEnv: verifyEnv
+};

@@ -1,39 +1,10 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const python = require('./python');
-const cp = require('child_process');
+const venv = require('./venv');
 const model = require('./acquireModel');
 
-
 require('colors');
-
-
-function verifyEnv() {
-    if (python.checkEnv()) {
-        const precompile = cp.execFile("./env/Scripts/PYTHON.exe", ["Scripts/precompile.py"]);
-
-        precompile.stderr.on('data', (data) => {
-            console.error(`${data.toString()}\n`.red);
-        });
-
-        precompile.stdout.on('data', (data) => {
-            console.log(data.toString());
-        });
-
-        precompile.on('exit', (code) => {
-            if (code === 0) {
-                checkModel();
-            } else {
-                process.exit(1);
-            }
-        });
-    } else {
-        console.error("env is not present".red);
-        process.exit(1);
-    }
-}
-
 
 
 function checkModel() {
@@ -48,5 +19,43 @@ function checkModel() {
     }
 }
 
-verifyEnv();
+const envStatus = venv.verifyEnv();
+
+if (!envStatus[0]) {
+    if (envStatus[1].length > 0) {
+        let missing = "";
+        for (let i = 0; i < envStatus[1].length; i++) {
+            let item = envStatus[1][i];
+
+            if (i < envStatus[1].length - 1) {
+                item = `${item}, `;
+            }
+
+            missing = missing + item;
+        }
+
+        console.error(`The following package(s) are missing: ${missing}`.red);
+    }
+
+    if (envStatus[2].length > 0) {
+        let conflicting = "";
+        for (let i = 0; i < envStatus[2].length; i++) {
+            let item = envStatus[2][i];
+
+            if (i < envStatus[2].length - 1) {
+                item = `${item}, `;
+            }
+
+            conflicting = conflicting + item;
+        }
+
+        console.error(`The following package(s) have version conflicts: ${conflicting}`.red);
+    }
+
+    process.exit(1);
+} else {
+    console.log("All packages are installed and there are no version conflicts\n".blue);
+}
+
+
 checkModel();
