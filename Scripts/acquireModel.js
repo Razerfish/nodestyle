@@ -124,6 +124,11 @@ function verifyModel(modelPath, timeout=7500) {
 
 
 
+/**
+ * @function main
+ * @description Attempts to run either downloadModel or copyModel.
+ * @returns A promise representing the completion of installing the model.
+ */
 function main() {
     return new Promise((resolve, reject) => {
         // Check if Vgg16 model already exists.

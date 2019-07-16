@@ -19,43 +19,60 @@ function checkModel() {
     }
 }
 
-const envStatus = venv.verifyEnv();
 
-if (!envStatus[0]) {
-    if (envStatus[1].length > 0) {
-        let missing = "";
-        for (let i = 0; i < envStatus[1].length; i++) {
-            let item = envStatus[1][i];
+/**
+ * @function main
+ * @description Verifies the env contents and checks if the model is present. If either of these fails an error is thrown.
+ */
+function main() {
+    const envStatus = venv.verifyEnv();
 
-            if (i < envStatus[1].length - 1) {
-                item = `${item}, `;
+    if (!envStatus[0]) {
+        if (envStatus[1].length > 0) {
+            let missing = "";
+            for (let i = 0; i < envStatus[1].length; i++) {
+                let item = envStatus[1][i];
+
+                if (i < envStatus[1].length - 1) {
+                    item = `${item}, `;
+                }
+
+                missing = missing + item;
             }
 
-            missing = missing + item;
+            console.error(`The following package(s) are missing: ${missing}`.red);
         }
 
-        console.error(`The following package(s) are missing: ${missing}`.red);
-    }
+        if (envStatus[2].length > 0) {
+            let conflicting = "";
+            for (let i = 0; i < envStatus[2].length; i++) {
+                let item = envStatus[2][i];
 
-    if (envStatus[2].length > 0) {
-        let conflicting = "";
-        for (let i = 0; i < envStatus[2].length; i++) {
-            let item = envStatus[2][i];
+                if (i < envStatus[2].length - 1) {
+                    item = `${item}, `;
+                }
 
-            if (i < envStatus[2].length - 1) {
-                item = `${item}, `;
+                conflicting = conflicting + item;
             }
 
-            conflicting = conflicting + item;
+            console.error(`The following package(s) have version conflicts: ${conflicting}`.red);
         }
 
-        console.error(`The following package(s) have version conflicts: ${conflicting}`.red);
+        throw new Error("Virtual environment does not satisfy requirements");
+    } else {
+        console.log("All packages are installed and there are no version conflicts\n".blue);
     }
 
-    process.exit(1);
-} else {
-    console.log("All packages are installed and there are no version conflicts\n".blue);
+
+    checkModel();
 }
 
 
-checkModel();
+if (require.main === module) {
+    main();
+}
+
+
+module.exports = {
+    main: main
+};

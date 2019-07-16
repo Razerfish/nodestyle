@@ -145,6 +145,10 @@ function verifyEnv() {
 }
 
 
+/**
+ * @function main
+ * @description Creates, prepares and installs required packages to a new virtual environment.
+ */
 async function main() {
     // Check if python is available.
     const pythonPath = python.findPython({ silent: true });
@@ -154,9 +158,7 @@ async function main() {
         const env = python.checkEnv();
 
         if (env) {
-            if (verifyEnv()[0]) {
-                process.exit(0);
-            } else {
+            if (!verifyEnv()[0]) {
                 await prepareEnv();
                 await installEnv();
             }
@@ -168,7 +170,7 @@ async function main() {
         }
     } else {
         console.error("Python is not available\n".red);
-        process.exit(1);
+        throw new Error("Python is not available");
     }
 }
 

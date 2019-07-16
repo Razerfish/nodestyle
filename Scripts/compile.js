@@ -2,6 +2,11 @@ const ora = require('ora');
 const cp = require('child_process');
 
 
+/**
+ * @function main
+ * @description Compiles torchbrain to a binary and logs output through spinners.
+ * @returns A promise representing the completion of compilation.
+ */
 function main() {
     return new Promise((resolve, reject) => {
         const spinner = ora({ prefixText: "Compiling torchbrain", spinner: "line" }).start();
