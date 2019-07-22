@@ -7,14 +7,6 @@ const cp = require('child_process');
 
 
 
-/**
- * @function findPython
- * @param {Object} options 
- * @param {boolean} options.silent Run in silent mode.Object
- * @param {boolean} options.ignoreEnv Ignore the PYTHON environment variable when searching.
- * @description Searches for a usable python installation from a set of predetermined locations and the PYTHON environment variable.
- * @returns {string | boolean} If a usable python installation is found a path to it is returned, otherwise false is returned.
- */
 function findPython(options) {
     // Input and type checking.
 
@@ -176,11 +168,6 @@ function findPython(options) {
 
 
 
-/**
- * @function checkEnv
- * @description - Checks if the env directory exists.
- * @returns {Boolean} - returns true if the env does exist and false if it doesn't.
- */
 function checkEnv() {
     if (fs.existsSync("./env")) {
         return true;
