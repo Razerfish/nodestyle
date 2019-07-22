@@ -7,6 +7,10 @@ const model = require('./acquireModel');
 require('colors');
 
 
+/**
+ * @function checkModel
+ * @description Checks if the vgg16 model is present at ./torchbrain/vgg16-397923af.pth. If the model is not present it either downloads or copies it.
+ */
 function checkModel() {
     if (!fs.existsSync("./torchbrain/vgg16-397923af.pth")) {
         if (fs.existsSync(path.join(os.homedir(), ".torch/models/vgg16-397923af.pth"))) {
