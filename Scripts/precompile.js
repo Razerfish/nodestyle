@@ -1,37 +1,16 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const venv = require('./venv');
 const model = require('./acquireModel');
-const utils = require('./utils');
-const exec = require('child_process').exec;
 
 require('colors');
 
-function checkEnv() {
-    if (utils.checkPython()) {
-        const precompile = exec("py Scripts/precompile.py");
 
-        precompile.stderr.on('data', (data) => {
-            console.error(`${data.toString()}\n`.red);
-        });
-
-        precompile.stdout.on('data', (data) => {
-            console.log(data.toString());
-        });
-
-        precompile.on('exit', (code) => {
-            if (code === 0) {
-                checkModel();
-            } else {
-                process.exit(1);
-            }
-        });
-    } else {
-        console.error("Python is not available\n".red);
-        process.exit(1);
-    }
-}
-
+/**
+ * @function checkModel
+ * @description Checks if the vgg16 model is present at ./torchbrain/vgg16-397923af.pth. If the model is not present it either downloads or copies it.
+ */
 function checkModel() {
     if (!fs.existsSync("./torchbrain/vgg16-397923af.pth")) {
         if (fs.existsSync(path.join(os.homedir(), ".torch/models/vgg16-397923af.pth"))) {
@@ -44,4 +23,60 @@ function checkModel() {
     }
 }
 
-checkEnv();
+
+/**
+ * @function main
+ * @description Verifies the env contents and checks if the model is present. If either of these fails an error is thrown.
+ */
+function main() {
+    const envStatus = venv.verifyEnv();
+
+    if (!envStatus[0]) {
+        if (envStatus[1].length > 0) {
+            let missing = "";
+            for (let i = 0; i < envStatus[1].length; i++) {
+                let item = envStatus[1][i];
+
+                if (i < envStatus[1].length - 1) {
+                    item = `${item}, `;
+                }
+
+                missing = missing + item;
+            }
+
+            console.error(`The following package(s) are missing: ${missing}`.red);
+        }
+
+        if (envStatus[2].length > 0) {
+            let conflicting = "";
+            for (let i = 0; i < envStatus[2].length; i++) {
+                let item = envStatus[2][i];
+
+                if (i < envStatus[2].length - 1) {
+                    item = `${item}, `;
+                }
+
+                conflicting = conflicting + item;
+            }
+
+            console.error(`The following package(s) have version conflicts: ${conflicting}`.red);
+        }
+
+        throw new Error("Virtual environment does not satisfy requirements");
+    } else {
+        console.log("All packages are installed and there are no version conflicts\n".blue);
+    }
+
+
+    checkModel();
+}
+
+
+if (require.main === module) {
+    main();
+}
+
+
+module.exports = {
+    main: main
+};
