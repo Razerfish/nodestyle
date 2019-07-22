@@ -21,6 +21,8 @@
     "Pytorch",
     "NeuralStyle"
   ],
+  "os": ["win32"],
+  "cpu": ["x64"],
   "author": "Alec Wilson <alec.wilson@baxter-academy.org> (Razerfish.dev)",
   "license": "BSD-3-Clause",
   "bugs": {
