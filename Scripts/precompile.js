@@ -31,13 +31,13 @@ function checkModel() {
 function main() {
     const envStatus = venv.verifyEnv();
 
-    if (!envStatus[0]) {
-        if (envStatus[1].length > 0) {
+    if (!envStatus.satisfies) {
+        if (envStatus.missing.length > 0) {
             let missing = "";
-            for (let i = 0; i < envStatus[1].length; i++) {
-                let item = envStatus[1][i];
+            for (let i = 0; i < envStatus.missing.length; i++) {
+                let item = envStatus.missing[i];
 
-                if (i < envStatus[1].length - 1) {
+                if (i < envStatus.missing.length - 1) {
                     item = `${item}, `;
                 }
 
@@ -47,12 +47,12 @@ function main() {
             console.error(`The following package(s) are missing: ${missing}`.red);
         }
 
-        if (envStatus[2].length > 0) {
+        if (envStatus.conflicting.length > 0) {
             let conflicting = "";
-            for (let i = 0; i < envStatus[2].length; i++) {
-                let item = envStatus[2][i];
+            for (let i = 0; i < envStatus.conflicting.length; i++) {
+                let item = envStatus.conflicting[i];
 
-                if (i < envStatus[2].length - 1) {
+                if (i < envStatus.conflicting.length - 1) {
                     item = `${item}, `;
                 }
 

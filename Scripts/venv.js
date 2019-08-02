@@ -6,14 +6,6 @@ const execFile = require('child_process').execFile;
 require('colors');
 
 
-/**
- * @function createEnv
- * @returns Promise object that resolves once a new python virtual environment with all packages is
- * installed successfully.
- * created at ./env, or rejects if it fails.
- * @description Creates a new python virtual environment at ./env and installs packages from
- * ./requirements.txt.
- */
 function createEnv() {
     /* eslint-disable no-shadow */
     return new Promise((resolve, reject) => {
@@ -49,11 +41,6 @@ function createEnv() {
 /* eslint-enable no-shadow */
 
 
-/**
- * @function prepareEnv
- * @description Upgrades pip and setuptools to their latest versions.
- * @returns A promise representing the completion of the described task.
- */
 function prepareEnv() {
     return new Promise((resolve, reject) => {
         const spinner = ora({ prefixText: "Upgrading components", spinner: "line" }).start();
@@ -93,11 +80,6 @@ function prepareEnv() {
 }
 
 
-/**
- * @function installEnv
- * @description Installs dependencies as defined in requirements.txt.
- * @returns A promise representing the completion of the described task.
- */
 function installEnv() {
     return new Promise((resolve, reject) => {
         const spinner = ora({ prefixText: "Installing dependencies", spinner: "line" }).start();
@@ -133,22 +115,13 @@ function installEnv() {
 }
 
 
-/**
- * @function verifyEnv
- * @description Check if all required packages are installed to the virtual environment.
- * @return {Array} [satisfies, missing, conflicting]
- */
 function verifyEnv() {
     const verify = JSON.parse(cp.execFileSync("./env/Scripts/PYTHON.exe", ["./Scripts/precompile.py"]).toString());
 
-    return [verify.satisfies, verify.missing, verify.conflicting];
+    return verify;
 }
 
 
-/**
- * @function main
- * @description Creates, prepares and installs required packages to a new virtual environment.
- */
 async function main() {
     // Check if python is available.
     const pythonPath = python.findPython({ silent: true });
@@ -158,7 +131,7 @@ async function main() {
         const env = python.checkEnv();
 
         if (env) {
-            if (!verifyEnv()[0]) {
+            if (!verifyEnv().satisfies) {
                 await prepareEnv();
                 await installEnv();
             }
