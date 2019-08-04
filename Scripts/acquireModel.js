@@ -87,7 +87,7 @@ function verifyModel(modelPath, timeout=7500) {
     return new Promise((resolve, reject) => {
         const spinner = ora({ prefixText: "Verifying model", spinner: "line" }).start();
 
-        setTimeout(() => {
+        const failTimer = setTimeout(() => {
             spinner.fail();
 
             reject(new Error(`Exceeded timeout of ${timeout} ms`));
@@ -108,10 +108,12 @@ function verifyModel(modelPath, timeout=7500) {
             hash.end();
             hash = hash.read().substr(0, srcHash.length);
             if (hash == srcHash) {
+                clearTimeout(failTimer);
                 spinner.succeed();
 
                 resolve(true);
             } else {
+                clearTimeout(failTimer);
                 spinner.fail();
 
                 resolve(false);
