@@ -41,6 +41,9 @@ function findPython(options) {
     }
 
 
+    // Define the acceptable python version range.
+    const pythonVersionRange = "~3.7.0";
+
 
     /*
     Create parameters for searching.
@@ -102,7 +105,7 @@ function findPython(options) {
                 '"version": str(sys.version_info[0]) + "." + str(sys.version_info[1]) + "." + str(sys.version_info[2])}))']).toString());
 
                 if (candidateData.x64 === true) {
-                    if (semver.satisfies(candidateData.version, ">=3.7.0 <3.7.2")) {
+                    if (semver.satisfies(candidateData.version, pythonVersionRange)) {
 
                         if (!options.silent) {
                             spinner.succeed();
@@ -128,7 +131,7 @@ function findPython(options) {
             '"version": str(sys.version_info[0]) + "." + str(sys.version_info[1]) + "." + str(sys.version_info[2]), "executable": sys.executable}))']).toString());
 
             if (candidateData.x64 === true) {
-                if (semver.satisfies(candidateData.version, ">=3.7.0 <3.7.2")) {
+                if (semver.satisfies(candidateData.version, pythonVersionRange)) {
 
                     if (!options.silent) {
                         spinner.succeed();
@@ -152,7 +155,7 @@ function findPython(options) {
             ]).toString());
 
             if (candidateData.x64 === true) {
-                if (semver.satisfies(candidateData.version, ">=3.7.0 <3.7.2")) {
+                if (semver.satisfies(candidateData.version, pythonVersionRange)) {
 
                     if (!options.silent) {
                         spinner.succeed();
