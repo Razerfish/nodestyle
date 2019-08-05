@@ -7,7 +7,7 @@ cache:
   npm: true
 
 before_install:
-  - choco install python --version "3.7.1"
+  - choco install python
 
 install:
   - npm install
