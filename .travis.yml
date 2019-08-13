@@ -1,17 +1,33 @@
-os: windows
+os:
+  - windows
+  - linux
+
 language: node_js
+
 node_js:
   - "10"
 
 cache:
   npm: true
 
-before_install:
-  - choco install python
+addons:
+  apt:
+    sources:
+      - deadsnakes
 
-install:
-  - npm install
+    packages:
+      - python3-venv
+      - python3.7
+      - python3.7-venv
+      - python3.6-venv
+      - python3.7-dev
   
+install:
+  if [ $TRAVIS_OS_NAME == "windows" ]; then
+  choco install python;
+  fi;
+
 script:
+  - npm install
   - npm test
   - npm run lint
