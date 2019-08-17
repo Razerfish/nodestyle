@@ -211,8 +211,25 @@ function checkEnv() {
 }
 
 
+/*
+Define platform specific pathing utilities.
+*/
+let binPath;
+let binExt;
+if (process.platform == 'win32') {
+    binPath = "./env/Scripts/";
+    binExt = ".exe";
+} else if (process.platform == 'linux') {
+    binPath = "./env/bin/";
+    binExt = "";
+} else {
+    throw new Error(`Unsupported platform: ${process.platform}`);
+}
+
 
 module.exports = {
     findPython: findPython,
-    checkEnv: checkEnv
+    checkEnv: checkEnv,
+    binPath: binPath,
+    binExt: binExt
 };
