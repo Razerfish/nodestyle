@@ -4,7 +4,7 @@ const execFileSync = require('child_process').execFileSync;
 const fs = require('fs');
 const path = require('path');
 
-// Check CUDA has an average runtime of 520.255 ms
+
 
 /**
  * @function checkCuda
