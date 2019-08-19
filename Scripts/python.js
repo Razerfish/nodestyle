@@ -5,7 +5,10 @@ const shell = require('shelljs');
 const semver = require('semver');
 const cp = require('child_process');
 
-
+//Make sure that the LOCALAPPDATA environment variable is a string.
+if (process.env.LOCALAPPDATA == undefined) {
+    process.env.LOCALAPPDATA = "";
+}
 
 /**
  * @function findPython
@@ -64,6 +67,21 @@ function findPython(options) {
                 path.join(process.env.LOCALAPPDATA, "Programs/Python/Python37/Python.exe"),
                 path.join(process.env.LOCALAPPDATA, "Programs/Python/Python37-64/Python.exe"),
                 "C:/Python37/Python.exe"
+            ]
+        },
+
+        linux: {
+            entries: [
+                "python",
+                "python3",
+                "python37",
+                "python3.7"
+            ],
+
+            paths: [
+                "/usr/bin/python",
+                "/usr/bin/python3",
+                "/usr/bin/python3.7"
             ]
         }
     };
