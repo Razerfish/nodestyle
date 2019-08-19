@@ -20,9 +20,13 @@ function checkModel() {
         console.log("Attempting to create model file...\n");
 
         if (fs.existsSync(path.join(os.homedir(), ".torch/models/vgg16-397923af.pth"))) {
-            model.copyModel();
+            model.copyModel().catch((err) => {
+                throw err;
+            });
         } else {
-            model.downloadModel();
+            model.downloadModel().catch((err) => {
+                throw err;
+            });
         }
     } else {
         spinner.succeed();
