@@ -4,7 +4,7 @@ const execFileSync = require('child_process').execFileSync;
 const fs = require('fs');
 const path = require('path');
 
-// Check CUDA has an average runtime of 520.255 ms
+
 
 /**
  * @function checkCuda
@@ -14,7 +14,14 @@ const path = require('path');
 function checkCuda() {
     return new Promise((resolve, reject) => {
         // Find the path to the torchbrain binary.
-        const torchPath = path.join(__dirname, "bin/torchbrain/torchbrain.exe");
+        let torchPath;
+        if (process.platform == 'win32') {
+            torchPath = path.join(__dirname, "bin/torchbrain/torchbrain.exe");
+        } else if (process.platform == 'linux') {
+            torchPath = path.join(__dirname, "bin/torchbrain/torchbrain");
+        } else {
+            throw new Error(`Unsupported platform: ${process.platform}`);
+        }
 
         // Make sure that the torchbrain binary exists.
         fs.access(torchPath, fs.constants.F_OK, (err) => {
@@ -22,7 +29,7 @@ function checkCuda() {
                 reject(err);
             } else {
                 // Create the process to check if CUDA is available.
-                const cudaProcess = execFile(path.join(__dirname, "bin/torchbrain/torchbrain.exe"), ["check_cuda"]);
+                const cudaProcess = execFile(torchPath, ["check_cuda"]);
 
                 // Once we get the result from the cudaProcess store it in cudaAvailable.
                 let cudaAvailable;
@@ -65,8 +72,24 @@ function checkCuda() {
  * @returns true or false
  */
 function checkCudaSync(timeout = 10000) {
+    let torchPath;
+    if (process.platform == 'win32') {
+        torchPath = path.join(__dirname, "bin/torchbrain/torchbrain.exe");
+    } else if (process.platform == 'linux') {
+        torchPath = path.join(__dirname, "bin/torchbrain/torchbrain");
+    } else {
+        throw new Error(`Unsupported platform: ${process.platform}`);
+    }
+
+
+    // Check if the torchbrain binary exists.
+    if (!fs.existsSync(torchPath)) {
+        throw new Error(`Could not find torchbrain binary at ${torchPath}`);
+    }
+
+
     // Get output from the check CUDA process.
-    const cuda = execFileSync(path.join(__dirname, "bin/torchbrain/torchbrain.exe"), ["check_cuda"], {
+    const cuda = execFileSync(torchPath, ["check_cuda"], {
         timeout: timeout
     });
 
