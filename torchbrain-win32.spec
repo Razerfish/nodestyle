@@ -6,7 +6,11 @@ block_cipher = None
 a = Analysis(['torchbrain\\torchbrain.py'],
              pathex=['C:\\Program Files (x86)\\Windows Kits\\10\\Redist\\10.0.17763.0\\ucrt\\DLLs\\x64'],
              binaries=[],
-             datas=[('torchbrain\\vgg16-397923af.pth', '.')],
+             datas=[
+                 ('torchbrain\\vgg16-397923af.pth', '.'),
+                 ('./env/Lib/site-packages/torchvision/models/detection/_utils.py', './Lib/site-packages/torchvision/models/detection/'),
+                 ('./env/Lib/site-packages/torchvision/ops/misc.py', './Lib/site-packages/torchvision/ops/')
+                 ],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],

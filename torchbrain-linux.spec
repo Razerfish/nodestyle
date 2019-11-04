@@ -5,7 +5,11 @@ block_cipher = None
 
 a = Analysis(['./torchbrain/torchbrain.py'],
              binaries=[],
-             datas=[('./torchbrain/vgg16-397923af.pth', '.')],
+             datas=[
+                 ('./torchbrain/vgg16-397923af.pth', '.'),
+                 ('./env/lib/python3.7/site-packages/torchvision/models/detection/_utils.py', './torchvision/models/detection/'),
+                 ('./env/lib/python3.7/site-packages/torchvision/ops/misc.py', './torchvision/ops/')
+                 ],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
