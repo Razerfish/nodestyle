@@ -4,6 +4,9 @@ import time
 import re
 import json
 
+originalWD = os.getcwd()
+os.chdir(os.path.dirname(os.path.abspath(sys.executable)))
+
 import numpy as np
 import torch
 from torch.optim import Adam
@@ -16,6 +19,8 @@ from neural_style.utils import log
 import neural_style.utils as utils
 from neural_style.transformer_net import TransformerNet
 from neural_style.vgg import Vgg16
+
+os.chdir(originalWD)
 
 import argparse
 
