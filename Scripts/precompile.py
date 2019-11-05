@@ -1,6 +1,7 @@
 import re
 import sys
 import json
+import platform
 
 import pkg_resources
 from pkg_resources import DistributionNotFound, VersionConflict
@@ -36,16 +37,16 @@ class bcolors:
 
 
 # Get required packages from requirements.txt
-required = open("requirements.txt").read().split("\n")
+if platform.system().lower() == "windows":
+    required = open("requirements-win32.txt").read().split("\n")
+elif platform.system().lower() == 'linux':
+    required = open("requirements-linux.txt").read().split("\n")
+else:
+    required = []
+    raise Exception("Unsupported platform " + platform.system())
 
-# Convert the torch requirement from a URL to a form that pkg_resources can process
-for i in range(len(required)):
-    if "download.pytorch.org" in required[i]:
-        torchVersion = list(re.search("(torch-\d.\d.\d)", required[i]).span())
-        torchVersion = required[i][torchVersion[0] : torchVersion[1]]
-        torchVersion = torchVersion.split("-")
-        torchVersion = torchVersion[0] + "==" + torchVersion[1]
-        required[i] = torchVersion
+required.pop(0)
+required.pop(0)
 
 satisfies = True
 missing = []

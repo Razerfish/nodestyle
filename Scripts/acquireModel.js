@@ -61,20 +61,24 @@ function downloadModel() {
  * @function copyModel
  * @param {string} src Path to copy model from, defaults to ~/.torch/models/vgg16-397923af.pth
  * @description Copy model from src to ./torchbrain/vgg16-397923af.pth
+ * @returns A promise representing the eventual completion of copying the model.
  */
 function copyModel(src=path.join(os.homedir(), ".torch/models/vgg16-397923af.pth")) {
-    const spinner = ora({ prefixText: "Copying model", spinner: "line" }).start();
+    return new Promise((resolve, reject) => {
+        const spinner = ora({ prefixText: "Copying model", spinner: "line" }).start();
 
-    try {
-        fs.copyFileSync(src, "./torchbrain/vgg16-397923af.pth");
-    } catch (err) {
-        spinner.fail(err);
-        return;
-    }
-
-    spinner.succeed();
-    return;
+        fs.copyFile(src, "./torchbrain/vgg16-397923af.pth", (err) => {
+            if (err) {
+                spinner.fail();
+                reject(err);
+            } else {
+                spinner.succeed();
+                resolve();
+            }
+        });
+    });
 }
+
 
 /**
  * @function verifyModel
@@ -140,14 +144,17 @@ function main() {
         } else {
             // If it doesn't exist download/copy it.
             if (fs.existsSync(path.join(os.homedir(), ".torch/models/vgg16-397923af.pth"))) {
-                copyModel();
-                // Check that the new model is intact.
-                verifyModel("./torchbrain/vgg16-397923af.pth").then((res) => {
-                    if (res) {
-                        resolve();
-                    } else {
-                        reject();
-                    }
+                copyModel().then(() => {
+                    // Check that the new model is intact.
+                    verifyModel("./torchbrain/vgg16-397923af.pth").then((res) => {
+                        if (res) {
+                            resolve();
+                        } else {
+                            reject();
+                        }
+                    }).catch((err) => {
+                        throw err;
+                    });
                 }).catch((err) => {
                     throw err;
                 });

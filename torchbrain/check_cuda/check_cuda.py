@@ -1,5 +1,13 @@
+import os
+import sys
+
+originalWD = os.getcwd()
+os.chdir(os.path.dirname(os.path.abspath(sys.executable)))
+
 import json
 import torch
+
+os.chdir(originalWD)
 
 def main():
     print(json.dumps({

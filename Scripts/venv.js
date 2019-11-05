@@ -46,7 +46,7 @@ function prepareEnv() {
         const spinner = ora({ prefixText: "Upgrading components", spinner: "line" }).start();
 
         // Upgrade pip and setuptools
-        const upgrade = execFile("./env/Scripts/python.exe", [
+        const upgrade = execFile(`${python.binPath}python${python.binExt}`, [
             '-m',
             'pip',
             'install',
@@ -85,10 +85,10 @@ function installEnv() {
         const spinner = ora({ prefixText: "Installing dependencies", spinner: "line" }).start();
 
         // Install packages from requirements.txt
-        const install = execFile("./env/Scripts/pip.exe", [
+        const install = execFile(`${python.binPath}pip${python.binExt}`, [
             'install',
             '-r',
-            'requirements.txt'
+            `requirements-${process.platform}.txt`
         ]);
 
         install.stdout.on('data', (data) => {
@@ -116,7 +116,7 @@ function installEnv() {
 
 
 function verifyEnv() {
-    const verify = JSON.parse(cp.execFileSync("./env/Scripts/PYTHON.exe", ["./Scripts/precompile.py"]).toString());
+    const verify = JSON.parse(cp.execFileSync(`${python.binPath}python${python.binExt}`, ["./Scripts/precompile.py"]).toString());
 
     return verify;
 }

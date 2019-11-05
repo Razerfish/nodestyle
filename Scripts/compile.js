@@ -1,4 +1,5 @@
 const ora = require('ora');
+const python = require('./python');
 const cp = require('child_process');
 
 
@@ -12,7 +13,8 @@ function main() {
         const spinner = ora({ prefixText: "Compiling torchbrain", spinner: "line" }).start();
 
 
-        const compile = cp.execFile("./env/Scripts/pyinstaller.exe", ['torchbrain.spec', '--onedir', '--noconfirm', '--workpath=build', '--distpath=app/bin']);
+        const compile = cp.execFile(`${python.binPath}pyinstaller${python.binExt}`, 
+            [`torchbrain-${process.platform}.spec`, '--onedir', '--noconfirm', '--workpath=build', '--distpath=app/bin']);
 
         compile.stdout.on('data', (data) => {
             spinner.text = data.toString().trim();
