@@ -10,24 +10,12 @@ node_js:
 cache:
   npm: true
 
-addons:
-  apt:
-    sources:
-      - deadsnakes
+env:
+  - TRAVIS_TASK="build" NODESTYLE_SKIP_PREPARE=false
+  - TRAVIS_TASK="lint" NODESTYLE_SKIP_PREPARE=true
 
-    packages:
-      - python3-venv
-      - python3.7
-      - python3.7-venv
-      - python3.6-venv
-      - python3.7-dev
-  
-install:
-  if [ $TRAVIS_OS_NAME == "windows" ]; then
-  choco install python --version 3.7.5;
-  fi;
+before_install:
+  source ./.travis/before_install.sh
 
 script:
-  - npm install
-  - npm test
-  - npm run lint
+  source ./.travis/script.sh
