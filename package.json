@@ -28,7 +28,7 @@
   "cpu": [
     "x64"
   ],
-  "author": "Alec Wilson <alec.wilson@baxter-academy.org> (Razerfish.dev)",
+  "author": "Fiona Wilson <fiona@razerfish.dev> (razerfish.dev)",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/Razerfish/nodestyle/issues"
